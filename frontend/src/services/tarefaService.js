@@ -1,14 +1,12 @@
 import axios from "axios";
 
-// Instância do Axios com baseURL centralizada
 const apiClient = axios.create({
-  baseURL: "http://localhost:8080/api", // URL base da API
+  baseURL: "http://localhost:8088/api", // Verifique a porta e o /api
   headers: {
     "Content-Type": "application/json",
   },
 });
 
-// Exporta funções específicas para cada endpoint
 export default {
   getTarefas() {
     return apiClient.get("/tarefas");
@@ -18,5 +16,12 @@ export default {
   },
   deleteTarefa(id) {
     return apiClient.delete(`/tarefas/${id}`);
+  },
+  // --- NOVAS FUNÇÕES ADICIONADAS ---
+  updateStatusTarefa(id, concluida) {
+    return apiClient.put(`/tarefas/${id}/status`, { concluida });
+  },
+  updateTituloTarefa(id, titulo) {
+    return apiClient.patch(`/tarefas/${id}/titulo`, { titulo });
   },
 };

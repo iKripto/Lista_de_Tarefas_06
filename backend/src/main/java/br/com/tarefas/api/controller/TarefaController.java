@@ -1,21 +1,20 @@
-package br.com.tarefas.api.controller; // Pacote corrigido
+package br.com.tarefas.api.controller;
 
-import br.com.tarefas.api.Tarefa;
-import br.com.tarefas.api.service.TarefaService; // Importa o serviço
+import br.com.tarefas.api.model.Tarefa;
+import br.com.tarefas.api.service.TarefaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
+import java.util.Map; // Importar Map
 
-
-
-@CrossOrigin(origins = "http://localhost:5173") // Permite requisições desta origem
 @RestController
-@RequestMapping("/api/tarefas")
+@RequestMapping("/tarefas") // Caminho corrigido para não duplicar /api
 public class TarefaController {
+
     @Autowired
-    private TarefaService tarefaService; // Injeta o Serviço, não o Repositório
+    private TarefaService tarefaService;
 
     @GetMapping
     public ResponseEntity<List<Tarefa>> listar() {
@@ -29,11 +28,24 @@ public class TarefaController {
         return new ResponseEntity<>(novaTarefa, HttpStatus.CREATED);
     }
 
+    // --- NOVOS ENDPOINTS ADICIONADOS ---
+
+    @PutMapping("/{id}/status")
+    public ResponseEntity<Tarefa> atualizarStatus(@PathVariable Long id, @RequestBody Map<String, Boolean> status) {
+        // @RequestBody Map... permite receber um JSON simples como {"concluida": true}
+        Tarefa tarefaAtualizada = tarefaService.atualizarStatus(id, status.get("concluida"));
+        return ResponseEntity.ok(tarefaAtualizada);
+    }
+
+    @PatchMapping("/{id}/titulo")
+    public ResponseEntity<Tarefa> atualizarTitulo(@PathVariable Long id, @RequestBody Map<String, String> payload) {
+        Tarefa tarefaAtualizada = tarefaService.atualizarTitulo(id, payload.get("titulo"));
+        return ResponseEntity.ok(tarefaAtualizada);
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletar(@PathVariable Long id) {
         tarefaService.deletarTarefa(id);
         return ResponseEntity.noContent().build();
     }
-
-    
 }

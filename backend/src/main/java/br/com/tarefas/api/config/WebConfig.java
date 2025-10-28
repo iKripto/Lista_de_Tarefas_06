@@ -9,11 +9,10 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
-            registry.addMapping("/tarefas/**") 
-            .allowedOrigins("http://localhost:5173")
-            .allowedOrigins("http://localhost:5173") // Origem do frontend
-            .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS") // Métodos HTTP permitidos
-            .allowedHeaders("*") // Permite todos os cabeçalhos
-            .allowCredentials(true);
+        registry.addMapping("/**") // Aplica a política para TODAS as rotas
+                .allowedOrigins("http://localhost:5173") // Origem do frontend Vue
+                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS") // Métodos HTTP permitidos
+                .allowedHeaders("*") // Permite todos os cabeçalhos
+                .allowCredentials(true);
     }
 }
